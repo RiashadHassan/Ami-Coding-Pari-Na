@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Khoj Search</title>
+</head>
+<body>
+    <h1>Khoj Search</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Khoj</button>
+    </form>
+    
+    {% if result is not None %}
+        <p>Result: {{ result }}</p>
+    {% endif %}
+</body>
+</html>
