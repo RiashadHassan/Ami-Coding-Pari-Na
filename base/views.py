@@ -10,9 +10,10 @@ def home(request):
     context={}
     return render(request, 'base/home.html', context)
 
-"""i can work with both function based views as well as class based views"""
+#i can work with both function based views as well as class based views
 
- 
+#SECTION 1
+
 def register_user(request):
     
     form =UserCreationForm() 
@@ -25,10 +26,7 @@ def register_user(request):
     context = {'form':form}
     return render(request, 'base/register.html', context)
 
-"""If needed I can handle custom forms that inherit from the built in ModelForm class in django
-   and create a custom form that will only have fields that meet our requirements for that 
-   particular feature :)
-"""
+
 def logout_user(request):
     logout(request)
     return redirect('home')
@@ -36,10 +34,9 @@ def logout_user(request):
 class LoginPageView(View):
     template_name= 'base/login.html'
     
-    def get(self, request):
-        
+    def get(self, request):        
         context={}
-        return render(request, self.template_name,context)
+        return render(request, self.template_name, context)
     
     def post(self, request):
         username= request.POST.get('username')
@@ -49,7 +46,9 @@ class LoginPageView(View):
         if user is not None:
             login(request, user)
             return redirect('home')
-        else: return HttpResponse('could not log in')
+        
+        else: 
+            return HttpResponse('could not log in')
         
         
 #SECTION 2
@@ -66,7 +65,13 @@ class Search(View):
         form= InputItemForm(request.POST)
         if form.is_valid():
             input_numbers = form.cleaned_data['input_numbers']
-            input_numbers_list= [int(number.strip()) for number in input_numbers.split(',')]
+            
+            try:
+                input_numbers_list= [int(number.strip()) for number in input_numbers.split(',')]
+            except:
+                return HttpResponse("Please enter valid integer values separated by commas.")
+                           
+            
             sorted_input_numbers_list = sorted(input_numbers_list, reverse=True)
             
             input_instance= form.save(commit=False)
