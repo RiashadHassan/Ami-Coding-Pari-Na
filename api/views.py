@@ -10,7 +10,9 @@ class InputItemAPI(APIView):
         
         
         
-        ''''''
+        '''takes params, checks if params are valid, then filters DB with the given params,
+            counts if there are any items in the DB within the DateTime range 
+            outputs response_data accordingly'''
         
         start_datetime = request.query_params.get('start_datetime')
         end_datetime = request.query_params.get('end_datetime')
@@ -23,7 +25,7 @@ class InputItemAPI(APIView):
             context = {'status': 'error', 'error_response': 'User does not exist'}
             return Response(context, status=404)
         
-        try: 
+        try: #formatting the DateTime range
             start_datetime = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
             end_datetime = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M:%S")
         except ValueError:
