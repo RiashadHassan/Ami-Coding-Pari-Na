@@ -6,7 +6,7 @@ from .forms import InputItemForm
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 
-def home(request):
+def home(request): 
         
     context={}
     return render(request, 'base/home.html', context)
