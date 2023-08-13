@@ -7,10 +7,18 @@
     <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 </head>
 <body>
-    
+   
     {%block content%}
 
     {%endblock content%}
+    <br>
+    {%if messages%}
+    <ul class ="messages">
+    {%for message in messages%}
+    <li>{{message}}</li>
+    {%endfor%}
+    </ul>
+    {%endif%}
 
 </body>
 </html>

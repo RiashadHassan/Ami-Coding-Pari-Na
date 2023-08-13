@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import InputItemForm
 from django.contrib.auth import authenticate, login, logout
@@ -28,6 +29,7 @@ def register_user(request):
 
 
 def logout_user(request):
+    
     logout(request)
     return redirect('home')
 
@@ -41,14 +43,17 @@ class LoginPageView(View):
     def post(self, request):
         username= request.POST.get('username')
         password=request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "User does not exist")
+            
         user =authenticate(username=username, password=password)
-        
         if user is not None:
             login(request, user)
             return redirect('home')
-        
         else: 
-            return HttpResponse('could not log in')
+            return redirect('login')
         
         
 #SECTION 2
