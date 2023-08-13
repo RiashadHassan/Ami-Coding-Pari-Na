@@ -5,6 +5,13 @@ from .serializer import InputItemSerializer
 from django.contrib.auth.models import User
 from datetime import datetime
 
+'''retrieving req params,
+   user validation, 
+   formatting datetime,
+   db query for input_items,
+   serializing, payload generation logic,
+   response generation based on payload logic (i.e. if query came up empty)
+'''
 class InputItemAPI(APIView):
     def get(self, request):              
         start_datetime = request.query_params.get('start_datetime')
@@ -35,7 +42,7 @@ class InputItemAPI(APIView):
                 
         if input_items_count==0:
             #no inputs in this time range
-            response_data= { 'status': 'success',
+            response_data= { 'status': 'failure',
                             'user_id': user_id,
                             'payload': 'No payloads created during the inserted time range :)'
                            } 
