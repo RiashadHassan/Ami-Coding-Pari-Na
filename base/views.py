@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 
 def home(request):
-    
+        
     context={}
     return render(request, 'base/home.html', context)
 
@@ -22,7 +22,7 @@ def register_user(request):
         if form.is_valid():
             new_user=form.save()
             login(request, new_user)
-            return HttpResponse('logged in')
+            return redirect('home')
     context = {'form':form}
     return render(request, 'base/register.html', context)
 
@@ -65,6 +65,8 @@ class Search(View):
         form= InputItemForm(request.POST)
         if form.is_valid():
             input_numbers = form.cleaned_data['input_numbers']
+            
+            
             
             try:
                 input_numbers_list= [int(number.strip()) for number in input_numbers.split(',')]
