@@ -7,8 +7,10 @@
     <button type="submit">Khoj</button>
 </form>
 
-{% if result is not None %}
-    <p>Result: {{ result }}</p>
+<div>
+    {% if result is not None %}
+<br>    
+<p>Result: {{ result }}</p>
 {% endif %}
-
+</div>
 {%endblock content%}
