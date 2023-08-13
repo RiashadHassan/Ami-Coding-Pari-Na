@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import InputItemForm
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 
 def home(request):
-    
+        
     context={}
     return render(request, 'base/home.html', context)
 
-"""i can work with both function based views as well as class based views"""
+#i can work with both function based views as well as class based views
 
- 
+#SECTION 1
+
 def register_user(request):
     
     form =UserCreationForm() 
@@ -21,35 +23,37 @@ def register_user(request):
         if form.is_valid():
             new_user=form.save()
             login(request, new_user)
-            return HttpResponse('logged in')
+            return redirect('home')
     context = {'form':form}
     return render(request, 'base/register.html', context)
 
-"""If needed I can handle custom forms that inherit from the built in ModelForm class in django
-   and create a custom form that will only have fields that meet our requirements for that 
-   particular feature :)
-"""
+
 def logout_user(request):
+    
     logout(request)
     return redirect('home')
 
 class LoginPageView(View):
     template_name= 'base/login.html'
     
-    def get(self, request):
-        
+    def get(self, request):        
         context={}
-        return render(request, self.template_name,context)
+        return render(request, self.template_name, context)
     
     def post(self, request):
         username= request.POST.get('username')
         password=request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "User does not exist")
+            
         user =authenticate(username=username, password=password)
-        
         if user is not None:
             login(request, user)
             return redirect('home')
-        else: return HttpResponse('could not log in')
+        else: 
+            return redirect('login')
         
         
 #SECTION 2
@@ -66,7 +70,15 @@ class Search(View):
         form= InputItemForm(request.POST)
         if form.is_valid():
             input_numbers = form.cleaned_data['input_numbers']
-            input_numbers_list= [int(number.strip()) for number in input_numbers.split(',')]
+            
+            
+            
+            try:
+                input_numbers_list= [int(number.strip()) for number in input_numbers.split(',')]
+            except:
+                return HttpResponse("Please enter valid integer values separated by commas.")
+                           
+            
             sorted_input_numbers_list = sorted(input_numbers_list, reverse=True)
             
             input_instance= form.save(commit=False)

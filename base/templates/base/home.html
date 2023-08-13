@@ -82,14 +82,14 @@ header h1 {
         <header>
             <h1>Welcome to Our Website </h1>
             {% if user.is_authenticated%}
-            {{request.user}}
+            {{request.user}} <br> {{request.user.id}}
             {%endif%}
         </header>
         <section class="hero">
             <h2>Join Us Today!</h2>
             <p>Discover a world of opportunities. Register or log in to get started.</p>
             <div class="buttons">
-                <a href="{% url 'register'%}" class="btn btn-primary">Register</a>
+                <a href="{% url 'register'%}" class="btn btn-secondary">Register</a>
                 <a href="{% url 'login'%}" class="btn btn-secondary">Login</a>
                 <a href="{% url 'logout'%}" class="btn btn-secondary">Logout</a>
             </div>
